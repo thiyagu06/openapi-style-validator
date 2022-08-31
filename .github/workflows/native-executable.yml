@@ -1,15 +1,18 @@
 name: native-executable
 on:
-  workflow_dispatch
+  release:
+    types:
+      - created
 jobs:
   build-native-lib:
     name: Build with GraalVM on macos-latest
     runs-on: macos-latest
     steps:
-      - name: download latest cli
-        run: >-
-          curl
-          https://repo1.maven.org/maven2/org/openapitools/openapistylevalidator/openapi-style-validator-cli/1.8/openapi-style-validator-cli-1.8-all.jar
+      - uses: suisei-cn/actions-download-file@v1.0.1
+        name: Download cli
+        with:
+          url: https://repo1.maven.org/maven2/org/openapitools/openapistylevalidator/openapi-style-validator-cli/1.8/openapi-style-validator-cli-1.8-all.jar
+          target: build/
       - name: Install graalvm
         uses: DeLaGuardo/setup-graalvm@5.0
         with:
@@ -17,7 +20,7 @@ jobs:
       - name: Install native-image
         run: gu install native-image
       - name: Build native executable
-        run: native-image -jar openapi-style-validator-cli-1.8-all.jar
+        run: native-image -jar build/openapi-style-validator-cli-1.8-all.jar
       - name: Upload native executable
         id: upload-native-executable
         uses: actions/upload-release-asset@v1
