@@ -22,7 +22,7 @@ jobs:
       - name: Install native-image
         run: gu install native-image
       - name: Build native executable
-        run: native-image -jar build/openapi-style-validator-cli-1.8-all.jar -H:+ReportExceptionStackTraces --no-fallback
+        run: native-image -jar build/openapi-style-validator-cli-1.8-all.jar -H:+ReportExceptionStackTraces -H:+AddAllCharsets --no-fallback
       - name: Upload native executable
         id: upload-native-executable
         uses: actions/upload-release-asset@v1
